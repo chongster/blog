@@ -30,7 +30,20 @@ function PostsDAO(db) {
 
         // now insert the post
         // hw3.2 TODO
-        callback(Error("insertEntry Not Yet Implemented!"), null);
+        //callback(Error("insertEntry Not Yet Implemented!"), null);
+        posts.insert(post, function(err, result){
+
+          console.log(result[0]);
+          if(!err){
+            console.log("inserted new post");
+            //reason for permalink in the return callback is because right after
+            //users submitted their you want to let them see what they just posted
+            //getPostByPermalink is the best way to do. Other methods made show more than one posts
+            return callback(err, permalink);
+          }
+
+          return callback(err, null);
+        });
     }
 
     this.getPosts = function(num, callback) {
@@ -82,7 +95,17 @@ function PostsDAO(db) {
         }
 
         // hw3.3 TODO
-        callback(Error("addComment Not Yet Implemented!"), null);
+        //callback(Error("addComment Not Yet Implemented!"), null);
+        posts.update({'permalink': permalink}, {$push:{'comments':comment}}, function(err,commented){
+          if(!err){
+            console.log(commented);
+            console.log("inserted a new comment");
+            return callback(null, commented);
+          }
+          return callback(err, null);
+        });
+
+
     }
 }
 
